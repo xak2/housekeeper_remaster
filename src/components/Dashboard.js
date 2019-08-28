@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Stack, DefaultPalette, mergeStyleSets } from 'office-ui-fabric-react';
 import Home from './Home'
+import Customers from './Customers'
 import AccountSettings from './AccountSettings'
 import User from './User'
 
@@ -40,7 +41,7 @@ class Navigation extends Component {
                         { key: 'Dashboard', name: 'Dashboard', path: '/dashboard', icon: 'ViewDashboard' },
                         { key: 'Customers', name: 'Customers', path: '/dashboard/customers', icon: 'People' },
                         { key: 'ProjectProgress', name: 'Project progress', path: '/dashboard/progress', icon: 'TimelineProgress' },
-                        { key: 'Tasks', name: 'Tasks', path: '/dashboard/tasks', icon: 'TaskGroup' },,
+                        { key: 'Tasks', name: 'Tasks (7)', path: '/dashboard/tasks', icon: 'TaskGroup' },
                         { key: 'Schedule', name: 'Schedule', path: '/dashboard/schedule', icon: 'Calendar' },
                         { key: 'Storehouse', name: 'Storehouse', path: '/dashboard/storehouse', icon: 'Quantity' },
                         { key: 'Settings', name: 'Account settings', path: '/dashboard/account', icon: 'PlayerSettings' },
@@ -60,7 +61,7 @@ export class Dashboard extends Component {
         const styles = mergeStyleSets({
             root: { background: DefaultPalette.white },
             leftBar: { background: DefaultPalette.white, padding: 5 },
-            item: { background: DefaultPalette.white, padding: 5 }
+            item: { background: DefaultPalette.white, padding: 5, width: '1000px' }
         });
         const tokens = {
             fiveGapStack: { childrenGap: 5, padding: 10 },
@@ -79,6 +80,7 @@ export class Dashboard extends Component {
                 </Stack.Item>
                 <Stack.Item align="auto" className={styles.item}>
                     <Route exact path="/dashboard" component={Home} />
+                    <Route path="/dashboard/customers" component={Customers} />
                     <Route path="/dashboard/account" component={AccountSettings} />
                 </Stack.Item>
             </Stack>
