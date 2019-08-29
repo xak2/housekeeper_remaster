@@ -1,7 +1,9 @@
+import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
 import 'nprogress/nprogress.css'
 
-const axios = require('axios');
+const axiosWithProgress = axios.create()
+loadProgressBar({}, axiosWithProgress)
 
 export function signIn(form) {
   return (dispatch) => {
@@ -13,9 +15,8 @@ export function signIn(form) {
       }
     })
 
-    loadProgressBar()
-    axios.post(
-      'http://localhost/housekeeper/php/Login.php',
+    axiosWithProgress.post(
+      'http://localhost/housekeeper_remaster/php/Login.php',
       { login: form.login, password: form.password },
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     ).then(function (response) {

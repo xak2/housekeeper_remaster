@@ -3,15 +3,19 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button'
+import { Stack } from 'office-ui-fabric-react'
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
-import 'nprogress/nprogress.css'
 
-const axios = require('axios');
+const axiosWithProgress = axios.create()
+loadProgressBar({}, axiosWithProgress)
 
 export interface IDialogAddCustomerState {
     hideDialog: boolean,
     name: any,
-    mail: any
+    mail: any,
+    error: any
 }
 
 export class DialogAddCustomer extends React.Component<{}, IDialogAddCustomerState> {
@@ -19,11 +23,22 @@ export class DialogAddCustomer extends React.Component<{}, IDialogAddCustomerSta
     public state: IDialogAddCustomerState = {
         hideDialog: true,
         name: '',
-        mail: ''
+        mail: '',
+        error: undefined
     }
 
     public render() {
-        const { hideDialog } = this.state
+
+        const { hideDialog, error } = this.state
+
+        const ErrorBar = (
+            <Stack horizontal tokens={{ childrenGap: 15 }} horizontalAlign="center">
+                <MessageBar messageBarType={MessageBarType.error} isMultiline={true}>
+                    {error}
+                </MessageBar>
+            </Stack>
+        )
+
         return (
             <CommandBarButton iconProps={{ iconName: 'AddFriend' }} text={'Add customer'} onClick={this._showDialog}>
                 <Dialog
@@ -38,6 +53,7 @@ export class DialogAddCustomer extends React.Component<{}, IDialogAddCustomerSta
                         styles: { main: { maxWidth: 450 } }
                     }}
                 >
+                    {error ? ErrorBar : ''}
                     <TextField name="name" onChange={this._handleChange} label="Customer or company name" iconProps={{ iconName: 'UserOptional' }} />
                     <TextField name="mail" onChange={this._handleChange} label="Customer mail" iconProps={{ iconName: 'Mail' }} />
                     <DialogFooter>
@@ -50,19 +66,16 @@ export class DialogAddCustomer extends React.Component<{}, IDialogAddCustomerSta
     }
 
     private _handleSubmit = () => {
-        loadProgressBar()
-        axios.post(
-            'http://localhost/housekeeper/php/AddCustomer.php',
+        var self = this
+        axiosWithProgress.post(
+            'http://localhost/housekeeper_remaster/php/AddCustomer.php',
             { name: this.state.name, mail: this.state.mail },
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).then(function (response: any) {
-            console.log(response)
-            if (response.data.authenticated === true) {
-                console.log('Success')
-            } else {
-                console.log('Failure')
-            }
-        }).catch(function (error: any) { })
+            if (response.data.error) self.setState({ error: response.data.error })
+            else self.setState({ error: undefined })
+            if (response.data.success === true) self.setState({ hideDialog: true })
+        })
     }
 
     private _handleChange = (event: any) => {
