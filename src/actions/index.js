@@ -57,3 +57,16 @@ export function signOut() {
     }
   }
 }
+
+export function loadCustomers() {
+  return (dispatch) => {
+    axiosWithProgress.get(`http://localhost/housekeeper_remaster/php/LoadCustomers.php`)
+      .then(r => {
+        const customers = r.data.customers
+        dispatch({
+          type: 'LOAD_CUSTOMERS',
+          customers: customers
+        })
+      })
+  }
+}

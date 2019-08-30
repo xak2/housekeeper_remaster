@@ -3,35 +3,31 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+import { loadCustomers } from '../../actions'
+import { connect } from 'react-redux'
+import { withRouter } from "react-router"
 
-export default class DetailsListBasicExample extends React.Component {
+export class DetailsListBasicExample extends React.Component {
 
     constructor(props) {
         super(props);
-
-        // Populate with items for demos.
-        this._allItems = this.props.customers;
-
-        console.log(this.props.customers)
-
         this._columns = [
+            { key: 'column0', name: 'ID', fieldName: 'id', minWidth: 100, maxWidth: 200, isResizable: false },
             { key: 'column1', name: 'Name', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column2', name: 'ID', fieldName: 'id', minWidth: 100, maxWidth: 200, isResizable: true }
-        ];
+            { key: 'column2', name: 'Mail', fieldName: 'mail', minWidth: 100, maxWidth: 200, isResizable: true }
+        ]
+    }
 
-        this.state = {
-            items: this._allItems
-        };
+    componentDidMount() {
+        this.props.loadCustomersAction()
     }
 
     render() {
-        const { items } = this.state;
-
         return (
             <Fabric>
                 <MarqueeSelection selection={this._selection}>
                     <DetailsList
-                        items={items}
+                        items={this.props.customers}
                         columns={this._columns}
                         setKey="set"
                         layoutMode={DetailsListLayoutMode.justified}
@@ -47,3 +43,20 @@ export default class DetailsListBasicExample extends React.Component {
         );
     }
 }
+
+const mapStateToProps = store => {
+    return {
+        customers: store.customersReducer.customers
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadCustomersAction: () => dispatch(loadCustomers())
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(DetailsListBasicExample))

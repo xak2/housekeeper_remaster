@@ -8,7 +8,8 @@ $result = $connect->query("select * from customers order by name asc");
 while ($row = $result->fetch_assoc()) {
     $response['customers'][] = array(
         'id' => $row['id'],
-        'name' => $row['name']
+        'name' => $row['name'],
+        'mail' => $row['email']
     );
 }
 
