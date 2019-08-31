@@ -1,15 +1,15 @@
 import * as React from 'react'
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
-import { TextField } from 'office-ui-fabric-react/lib/TextField'
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button'
 import { Stack } from 'office-ui-fabric-react'
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
+import { CommandBarButton } from 'office-ui-fabric-react/lib/Button'
+import { TextField } from 'office-ui-fabric-react/lib/TextField'
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
 import { loadCustomers } from '../../actions'
 import { connect } from 'react-redux'
-import { withRouter } from "react-router"
+import { withRouter } from 'react-router'
 
 const axiosWithProgress = axios.create()
 loadProgressBar({}, axiosWithProgress)
@@ -17,19 +17,44 @@ loadProgressBar({}, axiosWithProgress)
 export class DialogAddCustomer extends React.Component {
 
     constructor(props) {
-        super(props);
-        this.state = {
-            hideDialog: true,
-            name: '',
-            mail: '',
-            error: undefined
-        }
+        super(props)
+        this.state = { hideDialog: true, name: '', mail: '', error: undefined }
+    }
+
+    showDialog = () => {
+        this.setState({ hideDialog: false })
+    }
+
+    closeDialog = () => {
+        this.setState({ hideDialog: true })
+    }
+
+    handleChange = (event) => {
+        const target = event.target
+        const fieldValue = target.value
+        const fieldName = target.name
+        if (fieldName === 'name') this.setState({ name: fieldValue })
+        else if (fieldName === 'mail') this.setState({ mail: fieldValue })
+    }
+
+    handleSubmit = () => {
+        var self = this
+        axiosWithProgress.post(
+            'http://localhost/housekeeper/php/AddCustomer.php',
+            { name: this.state.name, mail: this.state.mail },
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        ).then((response) => {
+            if (response.data.error) self.setState({ error: response.data.error })
+            else self.setState({ error: undefined })
+            if (response.data.success === true) {
+                self.setState({ hideDialog: true })
+                this.props.loadCustomersAction()
+            }
+        })
     }
 
     render() {
-
         const { hideDialog, error } = this.state
-
         const ErrorBar = (
             <Stack horizontal tokens={{ childrenGap: 15 }} horizontalAlign="center">
                 <MessageBar messageBarType={MessageBarType.error} isMultiline={true}>
@@ -39,10 +64,10 @@ export class DialogAddCustomer extends React.Component {
         )
 
         return (
-            <CommandBarButton iconProps={{ iconName: 'AddFriend' }} text={'Add customer'} onClick={this._showDialog}>
+            <CommandBarButton iconProps={{ iconName: 'AddFriend' }} text={'Add customer'} onClick={this.showDialog}>
                 <Dialog
                     hidden={hideDialog}
-                    onDismiss={this._closeDialog}
+                    onDismiss={this.closeDialog}
                     dialogContentProps={{
                         type: DialogType.normal,
                         title: 'Add new customer'
@@ -53,49 +78,16 @@ export class DialogAddCustomer extends React.Component {
                     }}
                 >
                     {error ? ErrorBar : ''}
-                    <TextField name="name" onChange={this._handleChange} label="Customer or company name" iconProps={{ iconName: 'UserOptional' }} />
-                    <TextField name="mail" onChange={this._handleChange} label="Customer mail" iconProps={{ iconName: 'Mail' }} />
+                    <TextField name="name" onChange={this.handleChange} label="Customer or company name" iconProps={{ iconName: 'UserOptional' }} />
+                    <TextField name="mail" onChange={this.handleChange} label="Customer mail" iconProps={{ iconName: 'Mail' }} />
                     <DialogFooter>
-                        <PrimaryButton onClick={this._handleSubmit} text="Add" />
-                        <DefaultButton onClick={this._closeDialog} text="Cancel" />
+                        <PrimaryButton onClick={this.handleSubmit} text="Add" />
+                        <DefaultButton onClick={this.closeDialog} text="Cancel" />
                     </DialogFooter>
                 </Dialog>
             </CommandBarButton>
         )
     }
-
-    _handleSubmit(loadCustomersAction) {
-        var self = this
-        axiosWithProgress.post(
-            'http://localhost/housekeeper_remaster/php/AddCustomer.php',
-            { name: this.state.name, mail: this.state.mail },
-            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        ).then((response) => {
-            if (response.data.error) self.setState({ error: response.data.error })
-            else self.setState({ error: undefined })
-            if (response.data.success === true) {
-                self.setState({ hideDialog: true })
-               //loadCustomersAction()
-            }
-        })
-    }
-
-    _handleChange = (event) => {
-        const target = event.target
-        const fieldValue = target.value
-        const fieldName = target.name
-        if (fieldName === 'name') this.setState({ name: fieldValue })
-        else if (fieldName === 'mail') this.setState({ mail: fieldValue })
-    }
-
-    _showDialog = () => {
-        this.setState({ hideDialog: false })
-    }
-
-    _closeDialog = () => {
-        this.setState({ hideDialog: true })
-    }
-
 }
 
 const mapDispatchToProps = dispatch => {
@@ -104,7 +96,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(
-    {},
-    mapDispatchToProps
-)(withRouter(DialogAddCustomer))
+export default connect(null, mapDispatchToProps)(withRouter(DialogAddCustomer))

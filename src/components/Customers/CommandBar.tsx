@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CommandBarButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import { DialogAddCustomer } from './AddCustomerDialog.js';
+import DialogAddCustomer from './AddCustomerDialog.js';
 
 export default class CommandBar extends React.PureComponent {
     public render(): JSX.Element {

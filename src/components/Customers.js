@@ -5,7 +5,7 @@ import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
 
 const axiosWithProgress = axios.create()
-const axiosWithoutProgress = axios.create()
+//const axiosWithoutProgress = axios.create()
 
 loadProgressBar({}, axiosWithProgress)
 
