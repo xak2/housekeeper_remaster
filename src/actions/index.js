@@ -58,6 +58,24 @@ export function signOut() {
   }
 }
 
+export function sortCustomers(customers) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SORT_CUSTOMERS',
+      customers: customers
+    })
+  }
+}
+
+export function setSelectedCustomers(selected) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SELECT_CUSTOMERS',
+      selected: selected
+    })
+  }
+}
+
 export function loadCustomers() {
   return (dispatch) => {
     axiosWithProgress.get(`http://localhost/housekeeper/php/LoadCustomers.php`)

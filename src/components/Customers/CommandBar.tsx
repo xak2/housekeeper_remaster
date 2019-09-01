@@ -2,7 +2,8 @@ import * as React from 'react';
 import { CommandBarButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
-import DialogAddCustomer from './AddCustomerDialog.js';
+import DialogAddCustomer from './AddCustomerDialog.js'
+import DialogRemoveCustomer from './RemoveCustomerDialog.js'
 
 export default class CommandBar extends React.PureComponent {
     public render(): JSX.Element {
@@ -13,7 +14,8 @@ export default class CommandBar extends React.PureComponent {
                         key: 'search',
                         onRender: () => { return <SearchBox placeholder="Search" styles={{ root: { marginBottom: 0, width: 200 } }} /> }
                     },
-                    { key: 'addCustomer' }
+                    { key: 'addCustomer' },
+                    { key: 'removeCustomer' }
                 ]}
 
                 onRenderOverflowButton={this._onRenderOverflowButton}
@@ -27,6 +29,7 @@ export default class CommandBar extends React.PureComponent {
             return item.onRender(item);
         }
         if (item.key === 'addCustomer') return <DialogAddCustomer />
+        else if (item.key === 'removeCustomer') return <DialogRemoveCustomer />
         else return <CommandBarButton iconProps={{ iconName: item.icon }} menuProps={item.subMenuProps} text={item.name} />;
     };
 

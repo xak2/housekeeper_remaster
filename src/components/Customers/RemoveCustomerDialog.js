@@ -4,6 +4,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog'
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button'
 import { TextField } from 'office-ui-fabric-react/lib/TextField'
+import { Text } from 'office-ui-fabric-react/lib/Text'
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
@@ -14,11 +15,11 @@ import { withRouter } from 'react-router'
 const axiosWithProgress = axios.create()
 loadProgressBar({}, axiosWithProgress)
 
-export class DialogAddCustomer extends React.Component {
+export class DialogRemoveCustomer extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { hideDialog: true, name: '', mail: '', error: undefined }
+        this.state = { hideDialog: true, password: '', error: undefined }
     }
 
     showDialog = () => {
@@ -30,11 +31,7 @@ export class DialogAddCustomer extends React.Component {
     }
 
     handleChange = (event) => {
-        const target = event.target
-        const fieldValue = target.value
-        const fieldName = target.name
-        if (fieldName === 'name') this.setState({ name: fieldValue })
-        else if (fieldName === 'mail') this.setState({ mail: fieldValue })
+        this.setState({ [event.target.name]: event.target.value })
     }
 
     handleSubmit = () => {
@@ -55,6 +52,7 @@ export class DialogAddCustomer extends React.Component {
 
     render() {
         const { hideDialog, error } = this.state
+        const { selectedCustomers } = this.props
         const ErrorBar = (
             <Stack horizontal tokens={{ childrenGap: 15 }} horizontalAlign="center">
                 <MessageBar messageBarType={MessageBarType.error} isMultiline={true}>
@@ -62,15 +60,18 @@ export class DialogAddCustomer extends React.Component {
                 </MessageBar>
             </Stack>
         )
-
+        let customerNames = []
+        if (selectedCustomers !== false) {
+            selectedCustomers.map((item) => customerNames.push(item[1]))
+        }
         return (
-            <CommandBarButton iconProps={{ iconName: 'AddFriend' }} text={'Add customer'} onClick={this.showDialog}>
+            <CommandBarButton iconProps={{ iconName: 'UserRemove' }} text={selectedCustomers.length >= 1 ? `Remove customers (${selectedCustomers.length})` : 'Remove customers'} onClick={this.showDialog} disabled={selectedCustomers === false ? true : false}>
                 <Dialog
                     hidden={hideDialog}
                     onDismiss={this.closeDialog}
                     dialogContentProps={{
                         type: DialogType.normal,
-                        title: 'Add new customer'
+                        title: 'Remove customer'
                     }}
                     modalProps={{
                         isBlocking: false,
@@ -78,15 +79,21 @@ export class DialogAddCustomer extends React.Component {
                     }}
                 >
                     {error ? ErrorBar : ''}
-                    <TextField name="name" onChange={this.handleChange} label="Customer or company name" iconProps={{ iconName: 'UserOptional' }} />
-                    <TextField name="mail" onChange={this.handleChange} label="Customer mail" iconProps={{ iconName: 'Mail' }} />
+                    <Text variant='mediumPlus'>Remove customers ({customerNames.join(', ')})?</Text>
+                    <TextField name="password" onChange={this.handleChange} label="Confirm with password" iconProps={{ iconName: 'PasswordField' }} />
                     <DialogFooter>
-                        <PrimaryButton onClick={this.handleSubmit} iconProps={{ iconName: 'Save' }} text="Add" />
+                        <PrimaryButton onClick={this.handleSubmit} iconProps={{ iconName: 'Delete' }} text="Remove" />
                         <DefaultButton onClick={this.closeDialog} text="Cancel" />
                     </DialogFooter>
                 </Dialog>
             </CommandBarButton>
         )
+    }
+}
+
+const mapStateToProps = store => {
+    return {
+        selectedCustomers: store.customersReducer.selected
     }
 }
 
@@ -96,4 +103,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(withRouter(DialogAddCustomer))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(DialogRemoveCustomer))

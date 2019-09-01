@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { DetailsList, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList'
+import { DetailsList, DetailsListLayoutMode, Selection } from 'office-ui-fabric-react/lib/DetailsList'
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric'
-import { loadCustomers } from '../../actions'
+import { loadCustomers, sortCustomers, setSelectedCustomers } from '../../actions'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
@@ -10,19 +10,21 @@ export class CustomerList extends React.Component {
 
     constructor(props) {
         super(props)
-        
+
         this.selection = new Selection({
-            onSelectionChanged: () => this.setState({ selectionDetails: this.getSelectionDetails() })
+            onSelectionChanged: () => {
+                this.props.setSelectedCustomersAction(this.getSelectionIds())
+            }
         })
 
-        this._columns = [
-            { key: 'column0', name: 'ID', fieldName: 'id', minWidth: 100, maxWidth: 200, isResizable: false },
-            { key: 'column1', name: 'Name', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
+        const columns = [
+            { key: 'column0', name: 'ID', fieldName: 'id', minWidth: 30, maxWidth: 50, isResizable: false },
+            { key: 'column1', name: 'Name', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true, isSorted: true, isSortedDescending: false, onColumnClick: this.onColumnClick },
             { key: 'column2', name: 'Mail', fieldName: 'mail', minWidth: 100, maxWidth: 200, isResizable: true }
         ]
+
         this.state = {
-            items: this.props.customers,
-            selectionDetails: this.getSelectionDetails()
+            columns: columns
         }
     }
 
@@ -30,16 +32,17 @@ export class CustomerList extends React.Component {
         this.props.loadCustomersAction()
     }
 
-    getSelectionDetails() {
+    getSelectionIds() {
         const selectionCount = this.selection.getSelectedCount()
-
-        switch (selectionCount) {
-            case 0:
-                return 'No items selected';
-            case 1:
-                return '1 item selected: ' + (this.selection.getSelection()[0]).name;
-            default:
-                return `${selectionCount} items selected`;
+        const customersId = []
+        if (selectionCount >= 1) {
+            let i
+            for (i = 0; i < selectionCount; i++) {
+                customersId[i] = [(this.selection.getSelection()[i]).id, (this.selection.getSelection()[i]).name]
+            }
+            return customersId
+        } else {
+            return false
         }
     }
 
@@ -47,22 +50,38 @@ export class CustomerList extends React.Component {
         alert(`Item invoked: ${item.id}`);
     }
 
+    onColumnClick = (e, column) => {
+        const { columns } = this.state
+        const newColumns = columns.slice()
+        const currColumn = newColumns.filter(currCol => column.key === currCol.key)[0]
+        newColumns.forEach((newCol) => {
+            if (newCol === currColumn) {
+                currColumn.isSortedDescending = !currColumn.isSortedDescending
+                currColumn.isSorted = true
+            } else {
+                newCol.isSorted = false
+                newCol.isSortedDescending = true
+            }
+        })
+        copyAndSort(this.props, currColumn.fieldName, currColumn.isSortedDescending)
+        this.setState({
+            columns: newColumns
+        })
+    }
+
     render() {
-        const { items, selectionDetails } = this.state
+        const { columns } = this.state
         return (
             <Fabric>
-                <div>{selectionDetails}</div>
-                <MarqueeSelection selection={this._selection}>
+                <MarqueeSelection>
                     <DetailsList
-                        items={items}
-                        columns={this._columns}
+                        items={this.props.customers}
+                        columns={columns}
                         setKey="set"
                         layoutMode={DetailsListLayoutMode.justified}
-                        selection={this._selection}
+                        selection={this.selection}
                         selectionPreservedOnEmptyClick={true}
-                        ariaLabelForSelectionColumn="Toggle selection"
-                        ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                        checkButtonAriaLabel="Row checkbox"
+                        enterModalSelectionOnTouch={true}
                         onItemInvoked={this.onItemInvoked}
                     />
                 </MarqueeSelection>
@@ -71,15 +90,26 @@ export class CustomerList extends React.Component {
     }
 }
 
+function copyAndSort(props, columnKey, isSortedDescending) {
+    const key = columnKey
+    const items = props.customers
+    let newItems
+    newItems = items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
+    props.sortCustomersAction(newItems)
+}
+
 const mapStateToProps = store => {
     return {
-        customers: store.customersReducer.customers
+        customers: store.customersReducer.customers,
+        selectedCustomers: store.customersReducer.selected
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadCustomersAction: () => dispatch(loadCustomers())
+        loadCustomersAction: () => dispatch(loadCustomers()),
+        sortCustomersAction: (customers) => dispatch(sortCustomers(customers)),
+        setSelectedCustomersAction: (selected) => dispatch(setSelectedCustomers(selected))
     }
 }
 
