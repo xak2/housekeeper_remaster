@@ -22,25 +22,19 @@ export class DialogRemoveCustomer extends React.Component {
         this.state = { hideDialog: true, password: '', error: undefined }
     }
 
-    showDialog = () => {
-        this.setState({ hideDialog: false })
-    }
-
-    closeDialog = () => {
-        this.setState({ hideDialog: true })
-    }
-
-    handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value })
-    }
-
+    showDialog = () => { this.setState({ hideDialog: false }) }
+    closeDialog = () => { this.setState({ hideDialog: true }) }
+    handleChange = (event) => { this.setState({ [event.target.name]: event.target.value }) }
     handleSubmit = () => {
         var self = this
+        const { user, selectedCustomers } = this.props
         axiosWithProgress.post(
-            'http://localhost/housekeeper/php/AddCustomer.php',
-            { name: this.state.name, mail: this.state.mail },
+            'http://localhost/housekeeper/php/RemoveCustomers.php',
+            { user_id: user.id, password: this.state.password, customer: selectedCustomers },
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).then((response) => {
+            console.log(response.data)
+            self.setState({ password: '' })
             if (response.data.error) self.setState({ error: response.data.error })
             else self.setState({ error: undefined })
             if (response.data.success === true) {
@@ -93,7 +87,8 @@ export class DialogRemoveCustomer extends React.Component {
 
 const mapStateToProps = store => {
     return {
-        selectedCustomers: store.customersReducer.selected
+        selectedCustomers: store.customersReducer.selected,
+        user: store.userReducer.user
     }
 }
 
