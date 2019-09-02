@@ -5,6 +5,7 @@ import { withRouter, Route } from 'react-router-dom'
 import PropTypes from "prop-types";
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Stack, DefaultPalette, mergeStyleSets } from 'office-ui-fabric-react';
+import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths'
 import Home from './Home'
 import Customers from './Customers'
 import AccountSettings from './AccountSettings'
@@ -61,7 +62,7 @@ export class Dashboard extends Component {
         const styles = mergeStyleSets({
             root: { background: DefaultPalette.white },
             leftBar: { background: DefaultPalette.white, padding: 5 },
-            item: { background: DefaultPalette.white, padding: 5, width: '1000px' }
+            item: { background: DefaultPalette.white, padding: 10, width: '1000px', boxShadow: Depths.depth8 }
         });
         const tokens = {
             fiveGapStack: { childrenGap: 5, padding: 10 },

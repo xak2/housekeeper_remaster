@@ -40,12 +40,13 @@ export class DialogAddCustomer extends React.Component {
     handleSubmit = () => {
         var self = this
         axiosWithProgress.post(
-            'http://localhost/housekeeper/php/AddCustomer.php',
+            'http://localhost/housekeeper_remaster/php/AddCustomer.php',
             { name: this.state.name, mail: this.state.mail },
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).then((response) => {
-            if (response.data.error) self.setState({ error: response.data.error })
-            else self.setState({ error: undefined })
+            if (response.data.error) {
+                self.setState({ error: response.data.error.join(' ') })
+            } else self.setState({ error: undefined })
             if (response.data.success === true) {
                 self.setState({ hideDialog: true })
                 this.props.loadCustomersAction()

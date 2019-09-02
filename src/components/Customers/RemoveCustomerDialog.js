@@ -29,14 +29,14 @@ export class DialogRemoveCustomer extends React.Component {
         var self = this
         const { user, selectedCustomers } = this.props
         axiosWithProgress.post(
-            'http://localhost/housekeeper/php/RemoveCustomers.php',
+            'http://localhost/housekeeper_remaster/php/RemoveCustomers.php',
             { user_id: user.id, password: this.state.password, customer: selectedCustomers },
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).then((response) => {
-            console.log(response.data)
-            self.setState({ password: '' })
-            if (response.data.error) self.setState({ error: response.data.error })
-            else self.setState({ error: undefined })
+            console.log(response)
+            if (response.data.error) {
+                self.setState({ error: response.data.error.join(' ') })
+            } else self.setState({ error: undefined })
             if (response.data.success === true) {
                 self.setState({ hideDialog: true })
                 this.props.loadCustomersAction()
@@ -74,7 +74,8 @@ export class DialogRemoveCustomer extends React.Component {
                 >
                     {error ? ErrorBar : ''}
                     <Text variant='mediumPlus'>Remove customers ({customerNames.join(', ')})?</Text>
-                    <TextField name="password" onChange={this.handleChange} label="Confirm with password" iconProps={{ iconName: 'PasswordField' }} />
+                    <TextField name="password" type="password" placeholder="Password" 
+                    onChange={this.handleChange} label="Confirm with password" iconProps={{ iconName: 'PasswordField' }} />
                     <DialogFooter>
                         <PrimaryButton onClick={this.handleSubmit} iconProps={{ iconName: 'Delete' }} text="Remove" />
                         <DefaultButton onClick={this.closeDialog} text="Cancel" />
