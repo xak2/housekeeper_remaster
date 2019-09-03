@@ -26,7 +26,7 @@ export class DialogAddCustomer extends React.Component {
     }
 
     closeDialog = () => {
-        this.setState({ hideDialog: true })
+        this.setState({ hideDialog: true, name: '', mail: '', error: undefined })
     }
 
     handleChange = (event) => {
@@ -48,7 +48,7 @@ export class DialogAddCustomer extends React.Component {
                 self.setState({ error: response.data.error.join(' ') })
             } else self.setState({ error: undefined })
             if (response.data.success === true) {
-                self.setState({ hideDialog: true })
+                self.setState({ hideDialog: true, name: '', mail: '' })
                 this.props.loadCustomersAction()
             }
         })

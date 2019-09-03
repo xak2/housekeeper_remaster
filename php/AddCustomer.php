@@ -27,7 +27,8 @@ if ($_POST) {
     }
 
     if (count($response['error']) == 0) {
-        $result = $connect->query("insert into customers (name, email) values ('{$data['name']}', '{$data['mail']}')");
+        $time = time();
+        $result = $connect->query("insert into customers (name, mail, status, date_added, date_modified) values ('{$data['name']}', '{$data['mail']}', 'Just created', '{$time}', '{$time}')");
         $response['success'] = true;
     }
 

@@ -6,11 +6,7 @@ $connect = new mysqli('mysqldb3.ehost-services.com', 'frame_xak2', 'stefan91', '
 $result = $connect->query("select * from customers where removed != 'true' order by name asc");
 
 while ($row = $result->fetch_assoc()) {
-    $response['customers'][] = array(
-        'id' => $row['id'],
-        'name' => $row['name'],
-        'mail' => $row['email']
-    );
+    $response['customers'][] = $row;
 }
 
 $connect->close();

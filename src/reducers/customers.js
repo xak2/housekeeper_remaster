@@ -1,6 +1,7 @@
 const initialState = {
   customers: [],
-  selected: false
+  selected: false,
+  filter: ''
 }
 
 export default function customersReducer(state = initialState, action) {
@@ -11,6 +12,8 @@ export default function customersReducer(state = initialState, action) {
       return { ...state, customers: action.customers }
     case 'SELECT_CUSTOMERS':
       return { ...state, selected: action.selected }
+    case 'FILTER_CUSTOMERS':
+      return { ...state, filter: action.filter }
     default:
       return state
   }

@@ -36,9 +36,10 @@ export class DialogRemoveCustomer extends React.Component {
             console.log(response)
             if (response.data.error) {
                 self.setState({ error: response.data.error.join(' ') })
+                self.setState({ password: '' })
             } else self.setState({ error: undefined })
             if (response.data.success === true) {
-                self.setState({ hideDialog: true })
+                self.setState({ hideDialog: true, password: '', error: undefined })
                 this.props.loadCustomersAction()
             }
         })

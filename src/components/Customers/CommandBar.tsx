@@ -30,8 +30,8 @@ export default class CommandBar extends React.PureComponent {
         }
         if (item.key === 'addCustomer') return <DialogAddCustomer />
         else if (item.key === 'removeCustomer') return <DialogRemoveCustomer />
-        else return <CommandBarButton iconProps={{ iconName: item.icon }} menuProps={item.subMenuProps} text={item.name} />;
-    };
+        else return <CommandBarButton iconProps={{ iconName: item.icon }} menuProps={item.subMenuProps} text={item.name} />
+    }
 
     private _onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
         const buttonStyles: Partial<IButtonStyles> = {

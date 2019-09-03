@@ -76,6 +76,15 @@ export function setSelectedCustomers(selected) {
   }
 }
 
+export function filterCustomers(search) {
+  return (dispatch) => {
+    dispatch({
+      type: 'FILTER_CUSTOMERS',
+      filter: search
+    })
+  }
+}
+
 export function loadCustomers() {
   return (dispatch) => {
     axiosWithProgress.get(`http://localhost/housekeeper_remaster/php/LoadCustomers.php`)

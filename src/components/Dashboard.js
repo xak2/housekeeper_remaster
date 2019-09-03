@@ -62,7 +62,7 @@ export class Dashboard extends Component {
         const styles = mergeStyleSets({
             root: { background: DefaultPalette.white },
             leftBar: { background: DefaultPalette.white, padding: 5 },
-            item: { background: DefaultPalette.white, padding: 10, width: '1000px', boxShadow: Depths.depth8 }
+            item: { background: DefaultPalette.white, padding: 10, width: '1200px', boxShadow: Depths.depth8 }
         });
         const tokens = {
             fiveGapStack: { childrenGap: 5, padding: 10 },
