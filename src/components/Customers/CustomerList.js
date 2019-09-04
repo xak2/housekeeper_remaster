@@ -175,8 +175,7 @@ function copyAndSort(props, columnKey, isSortedDescending) {
 
 const mapStateToProps = store => {
     return {
-        customers: store.customersReducer.customers,
-        filter: store.customersReducer.filter
+        customers: store.customersReducer.customers
     }
 }
 

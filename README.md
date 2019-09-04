@@ -1,8 +1,14 @@
-# [сделано] Реализовать удаление клиентов
-# [bug] $connect->connect_errno won't work on error
-# [сделано] [bug] не обновляется Selection после операции
-# [сделано] Закончить добавление клиентов (not null, mail check, name > 7)
-# [50/50] Реализовать Dialog on ItemInwoke в CustomerList
-# [сделано] Оптимизировать структуру таблицы CustomerList
-# Реализовать поиск среди клиентов
-# Переделать ComandBar из ts в js
+Consts
+* Delivery adres for each project
+
+Todo list
+# CustomerList
+* 01.09.2019
+* [done] release customer deleting
+* [done] release customer reloading after adding and deleting operations
+* [done] fix a bug with Selection reset
+* [done] finaly complete customer adding
+* [done] optimize customer table
+* [done] release suggestion search
+* [done] conver ComandBar from ts to js
+* [50/50] release customer editing on invoke

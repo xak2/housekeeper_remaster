@@ -76,11 +76,11 @@ export function setSelectedCustomers(selected) {
   }
 }
 
-export function filterCustomers(search) {
+export function filterCustomers(customers) {
   return (dispatch) => {
     dispatch({
       type: 'FILTER_CUSTOMERS',
-      filter: search
+      customers: customers
     })
   }
 }
@@ -92,7 +92,8 @@ export function loadCustomers() {
         const customers = r.data.customers
         dispatch({
           type: 'LOAD_CUSTOMERS',
-          customers: customers
+          customers: customers,
+          staticCustomers: customers
         })
       })
   }
