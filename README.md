@@ -1,9 +1,8 @@
-Consts
+# Consts
 * Delivery adres for each project
 
-Todo list
-# CustomerList
-* 01.09.2019
+# Todo list
+CustomerList
 * [done] release customer deleting
 * [done] release customer reloading after adding and deleting operations
 * [done] fix a bug with Selection reset
