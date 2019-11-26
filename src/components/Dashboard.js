@@ -82,6 +82,7 @@ export class Dashboard extends Component {
                 <Stack.Item align="auto" className={styles.item}>
                     <Route exact path="/dashboard" component={Home} />
                     <Route path="/dashboard/customers" component={Customers} />
+                    <Route path="/dashboard/customer/" component={Customers} />
                     <Route path="/dashboard/account" component={AccountSettings} />
                 </Stack.Item>
             </Stack>

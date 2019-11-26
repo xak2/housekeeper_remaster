@@ -11,7 +11,11 @@ import { withRouter } from 'react-router'
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling'
 import moment from 'moment'
 import { Stack } from 'office-ui-fabric-react'
-import { ActivityItem, Link, mergeStyleSets } from 'office-ui-fabric-react'
+import {
+    ActivityItem,
+    Link,
+    mergeStyleSets
+} from 'office-ui-fabric-react'
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown'
 import { TestImages } from '@uifabric/example-data'
 
@@ -22,7 +26,7 @@ export class CustomerList extends React.Component {
             onSelectionChanged: () => { this.props.setSelectedCustomersAction(this.getSelectionIds()) }
         })
         const columns = [
-            { key: 'id', name: 'ID', fieldName: 'id', minWidth: 10, maxWidth: 50, isResizable: false },
+            { key: 'id', name: 'Action', fieldName: 'id', minWidth: 10, maxWidth: 50, isResizable: false },
             { key: 'name', name: 'Name', fieldName: 'name', minWidth: 50, maxWidth: 200, isResizable: true, isSorted: true, isSortedDescending: false, onColumnClick: this.onColumnClick },
             { key: 'mail', name: 'Mail', fieldName: 'mail', minWidth: 50, maxWidth: 200, isResizable: true },
             { key: 'status', name: 'Status', fieldName: 'status', minWidth: 100, maxWidth: 800, isResizable: true, onColumnClick: this.onColumnClick },
@@ -40,7 +44,7 @@ export class CustomerList extends React.Component {
     closeDialog = () => { this.setState({ hideDialog: true, currentCustomer: [] }) }
     handleChange = (event) => { this.setState({ [event.target.name]: event.target.value }) }
     handleSubmit = () => {
-        var self = this
+        console.log(this.state)
     }
     // Table controls
     getSelectionIds() {
@@ -89,7 +93,7 @@ export class CustomerList extends React.Component {
             { key: 1, text: 'Just created' },
             { key: 2, text: 'Made deposit 300€' },
             { key: 3, text: 'Got quotation' },
-            { key: 3, text: 'Awaiting TDP-1' }
+            { key: 4, text: 'Awaiting TDP-1' }
         ]
         const activityItemExamples = {
             key: 1,
@@ -101,15 +105,13 @@ export class CustomerList extends React.Component {
                         alert('A name was clicked.');
                     }}
                 >
-                    Jack Howden
+                    Vyacheslav Stefanovich
                 </Link>,
-                <span key={2}> renamed </span>,
-                <span key={3} className={classNames.nameText}>
-                    DocumentTitle.docx
-                </span>
+                <span key={2}> added customer </span>,
+                <span key={3} className={classNames.nameText}>{currentCustomer.name}</span>
             ],
             activityPersonas: [{ imageUrl: TestImages.personaMale }],
-            comments: 'Hello, this is the text of my basic comment!',
+            //comments: 'Hello, this is the text of my basic comment!',
             timeStamp: '23m ago'
         }
 
@@ -119,18 +121,18 @@ export class CustomerList extends React.Component {
                     <Stack>
                         <Stack horizontal disableShrink tokens={stackTokens}>
                             <Stack.Item align="end" styles={stackBlocks}>
-                                <span><TextField name="name" onChange={this.handleChange} label="Customer name" iconProps={{ iconName: 'UserOptional' }} /></span>
+                                <span><TextField name="name" defaultValue={currentCustomer.name} onChange={this.handleChange} label="Customer name" iconProps={{ iconName: 'UserOptional' }} /></span>
                             </Stack.Item>
                             <Stack.Item align="end" styles={stackBlocks}>
-                                <TextField name="name" onChange={this.handleChange} label="Phone number" iconProps={{ iconName: 'Phone' }} />
+                                <TextField name="phone" defaultValue={currentCustomer.phone} onChange={this.handleChange} label="Phone number" iconProps={{ iconName: 'Phone' }} />
                             </Stack.Item>
                         </Stack>
                         <Stack horizontal disableShrink tokens={stackTokens}>
                             <Stack.Item align="end" styles={stackBlocks}>
-                                <TextField name="name" onChange={this.handleChange} label="Mail" iconProps={{ iconName: 'Mail' }} />
+                                <TextField name="mail" defaultValue={currentCustomer.mail} onChange={this.handleChange} label="Mail" iconProps={{ iconName: 'Mail' }} />
                             </Stack.Item>
                             <Stack.Item align="end" styles={stackBlocks}>
-                                <Dropdown placeholder="Select an option" label="Update status"  iconProps={{ iconName: 'Step' }} options={options} />
+                                <Dropdown name="status" placeholder={currentCustomer.status} label="Update status" iconProps={{ iconName: 'Step' }} options={options} />
                             </Stack.Item>
                         </Stack>
                         <Stack horizontal disableShrink tokens={stackTokens}>
@@ -163,6 +165,10 @@ export class CustomerList extends React.Component {
 function renderItemColumn(item, index, column) {
     const fieldContent = item[column.fieldName]
     switch (column.key) {
+        case 'id': {
+            let link = '/dashboard/customer/' + fieldContent
+            return <Link href={link}>View</Link>
+        }
         case 'name': return <span className={mergeStyles({ fontWeight: 'bold' })}>{fieldContent}</span>
         case 'mail': {
             let mailTo = 'mailto: ' + fieldContent
