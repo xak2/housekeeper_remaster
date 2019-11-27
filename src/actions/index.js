@@ -16,7 +16,7 @@ export function signIn(form) {
     })
 
     axiosWithProgress.post(
-      'http://localhost/housekeeper_remaster/php/Login.php',
+      'http://localhost/housekeeper/php/Login.php',
       { login: form.login, password: form.password },
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     ).then(function (response) {
@@ -87,7 +87,7 @@ export function filterCustomers(customers) {
 
 export function loadCustomers() {
   return (dispatch) => {
-    axiosWithProgress.get(`http://localhost/housekeeper_remaster/php/LoadCustomers.php`)
+    axiosWithProgress.get(`http://localhost/housekeeper/php/LoadCustomers.php`)
       .then(r => {
         const customers = r.data.customers
         dispatch({

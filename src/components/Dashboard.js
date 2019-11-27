@@ -8,6 +8,7 @@ import { Stack, DefaultPalette, mergeStyleSets } from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths'
 import Home from './Home'
 import Customers from './Customers'
+import Customer from './Customer'
 import AccountSettings from './AccountSettings'
 import User from './User'
 
@@ -82,7 +83,7 @@ export class Dashboard extends Component {
                 <Stack.Item align="auto" className={styles.item}>
                     <Route exact path="/dashboard" component={Home} />
                     <Route path="/dashboard/customers" component={Customers} />
-                    <Route path="/dashboard/customer/" component={Customers} />
+                    <Route path="/dashboard/customer/:customerId" component={Customer} />
                     <Route path="/dashboard/account" component={AccountSettings} />
                 </Stack.Item>
             </Stack>
@@ -102,4 +103,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dashboard))

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import CommandBar from './Customers/CommandBar'
+import CommandBar from './Customers/CommandBar.js'
 import CustomerList from './Customers/CustomerList.js'
 import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'

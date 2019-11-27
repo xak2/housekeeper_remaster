@@ -7,17 +7,12 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { loadCustomers, sortCustomers, setSelectedCustomers } from '../../actions'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter, Link as RouterLink } from 'react-router-dom'
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling'
 import moment from 'moment'
 import { Stack } from 'office-ui-fabric-react'
-import {
-    ActivityItem,
-    Link,
-    mergeStyleSets
-} from 'office-ui-fabric-react'
+import { ActivityItem, Link, mergeStyleSets } from 'office-ui-fabric-react'
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown'
-import { TestImages } from '@uifabric/example-data'
 
 export class CustomerList extends React.Component {
     constructor(props) {
@@ -110,7 +105,7 @@ export class CustomerList extends React.Component {
                 <span key={2}> added customer </span>,
                 <span key={3} className={classNames.nameText}>{currentCustomer.name}</span>
             ],
-            activityPersonas: [{ imageUrl: TestImages.personaMale }],
+            activityPersonas: [{ imageUrl: 'http://localhost/media/TestPersonaImage.png' }],
             //comments: 'Hello, this is the text of my basic comment!',
             timeStamp: '23m ago'
         }
@@ -167,7 +162,7 @@ function renderItemColumn(item, index, column) {
     switch (column.key) {
         case 'id': {
             let link = '/dashboard/customer/' + fieldContent
-            return <Link href={link}>View</Link>
+            return <RouterLink to={link}>View</RouterLink>
         }
         case 'name': return <span className={mergeStyles({ fontWeight: 'bold' })}>{fieldContent}</span>
         case 'mail': {
