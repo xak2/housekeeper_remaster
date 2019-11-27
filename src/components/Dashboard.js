@@ -9,6 +9,7 @@ import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths'
 import Home from './Home'
 import Customers from './Customers'
 import Customer from './Customer'
+import Schedule from './Schedule'
 import AccountSettings from './AccountSettings'
 import User from './User'
 
@@ -84,6 +85,7 @@ export class Dashboard extends Component {
                     <Route exact path="/dashboard" component={Home} />
                     <Route path="/dashboard/customers" component={Customers} />
                     <Route path="/dashboard/customer/:customerId" component={Customer} />
+                    <Route path="/dashboard/schedule" component={Schedule} />
                     <Route path="/dashboard/account" component={AccountSettings} />
                 </Stack.Item>
             </Stack>

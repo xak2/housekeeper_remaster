@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { useParams } from "react-router-dom";
 
 function CustomerId() {
@@ -6,9 +6,9 @@ function CustomerId() {
     return customerId;
   }
 
-class Customer extends Component {
+class Customer extends React.Component {
     render() {
-        return <h1>Customer <CustomerId /></h1>
+        return CustomerId()
     }
 }
 
