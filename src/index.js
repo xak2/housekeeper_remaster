@@ -5,6 +5,7 @@ import store from './store'
 import App from './components/App'
 
 import { Customizer, mergeStyles } from 'office-ui-fabric-react'
+import { FluentCustomizations } from '@uifabric/fluent-theme'
 import { initializeIcons } from '@uifabric/icons'
 import './media/index.css'
 
@@ -14,7 +15,7 @@ mergeStyles({selectors: {':global(body), :global(html), :global(#root)': {margin
 
 ReactDOM.render(
   <Provider store={store}>
-    <Customizer>
+    <Customizer {...FluentCustomizations}>
       <App />
     </Customizer>
   </Provider>,

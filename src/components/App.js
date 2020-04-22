@@ -24,6 +24,7 @@ class App extends Component {
     } else {
       return (
         <BrowserRouter>
+          <FancyRoute exact path="/" component={Dashboard} />
           <FancyRoute path="/signin" component={SignIn} />
           <FancyRoute path="/dashboard" component={Dashboard} />
           <Redirect from="/" to="/dashboard" />

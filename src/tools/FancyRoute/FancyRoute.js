@@ -7,7 +7,8 @@ import { withRouter } from "react-router";
 nprogress.configure({ showSpinner: true })
 
 class FancyRoute extends React.Component {
-    componentWillMount() {
+    constructor(props) {
+        super(props)
         nprogress.start()
     }
     componentDidMount() {

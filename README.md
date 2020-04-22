@@ -1,24 +1,13 @@
-State tree
-app: {
-    user: {
-        auth: boolen (true/false),
-        id: number,
-        name: string
-    }
-}
+# Consts
+* Delivery adres for each project
 
-App scheme
-App (component): {
-    isAuthenticated?: {
-        Dashboard (component): {
-            Customers (?),
-            PackingList (container)
-        }
-    } : {
-        LandingPage: {
-            SignIn (container),
-            Track (container),
-            ResetPassword (container)
-        }
-    }
-}
+# Todo list
+CustomerList
+* [done] release customer deleting
+* [done] release customer reloading after adding and deleting operations
+* [done] fix a bug with Selection reset
+* [done] finaly complete customer adding
+* [done] optimize customer table
+* [done] release suggestion search
+* [done] conver ComandBar from ts to js
+* [50/50] release customer editing on invoke

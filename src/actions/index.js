@@ -1,7 +1,9 @@
+import axios from 'axios'
 import { loadProgressBar } from 'axios-progress-bar'
 import 'nprogress/nprogress.css'
 
-const axios = require('axios');
+const axiosWithProgress = axios.create()
+loadProgressBar({}, axiosWithProgress)
 
 export function signIn(form) {
   return (dispatch) => {
@@ -13,9 +15,8 @@ export function signIn(form) {
       }
     })
 
-    loadProgressBar()
-    axios.post(
-      'http://localhost/housekeeper/php/Login.php',
+    axiosWithProgress.post(
+      'http://localhost/housekeeper_remaster/php/Login.php',
       { login: form.login, password: form.password },
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     ).then(function (response) {
@@ -54,5 +55,46 @@ export function signOut() {
     user: {
       authenticated: false
     }
+  }
+}
+
+export function sortCustomers(customers) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SORT_CUSTOMERS',
+      customers: customers
+    })
+  }
+}
+
+export function setSelectedCustomers(selected) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SELECT_CUSTOMERS',
+      selected: selected
+    })
+  }
+}
+
+export function filterCustomers(customers) {
+  return (dispatch) => {
+    dispatch({
+      type: 'FILTER_CUSTOMERS',
+      customers: customers
+    })
+  }
+}
+
+export function loadCustomers() {
+  return (dispatch) => {
+    axiosWithProgress.get(`http://localhost/housekeeper_remaster/php/LoadCustomers.php`)
+      .then(r => {
+        const customers = r.data.customers
+        dispatch({
+          type: 'LOAD_CUSTOMERS',
+          customers: customers,
+          staticCustomers: customers
+        })
+      })
   }
 }
