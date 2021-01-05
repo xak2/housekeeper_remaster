@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@uifabric/fluent-theme": "^7.1.4",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-progress-bar": "^1.2.0",
     "js-cookie": "^2.2.1",
     "microtime": "^3.0.0",
